@@ -861,6 +861,140 @@
       box-shadow: 0 0 0 4px var(--agd-orange), 0 0 0 8px rgba(255,153,0,.2);
       border-radius: var(--radius);
     }
+
+    /* ===== STEP GUIDE BANNER ===== */
+    .guide-banner {
+      background: linear-gradient(135deg, var(--agd-dark) 0%, var(--agd-dark-3) 100%);
+      color: white;
+      padding: 18px 24px;
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      animation: guideIn .5s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .guide-banner::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+      background: var(--agd-orange);
+    }
+    .guide-banner::after {
+      content: '';
+      position: absolute; right: -30px; top: -30px;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(255,153,0,.1), transparent 70%);
+      border-radius: 50%;
+    }
+    @keyframes guideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .guide-banner .guide-step-num {
+      width: 44px; height: 44px;
+      background: var(--agd-orange);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 800;
+      color: var(--agd-dark);
+      flex-shrink: 0;
+      box-shadow: 0 2px 10px rgba(255,153,0,.4);
+    }
+    .guide-banner .guide-text { flex: 1; z-index: 1; }
+    .guide-banner .guide-text h3 {
+      font-size: 15px; font-weight: 700; margin-bottom: 4px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .guide-banner .guide-text p {
+      font-size: 13px; opacity: .75;
+    }
+    .guide-banner .guide-action {
+      z-index: 1; flex-shrink: 0;
+    }
+
+    /* ===== POINTER ARROW (pulsing) ===== */
+    .pointer-arrow {
+      display: inline-flex;
+      align-items: center; gap: 8px;
+      animation: pointerBounce 1.5s ease-in-out infinite;
+      color: var(--agd-orange);
+      font-weight: 700;
+      font-size: 13px;
+      margin-top: 12px;
+    }
+    .pointer-arrow .arrow {
+      font-size: 22px;
+      display: inline-block;
+    }
+    @keyframes pointerBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* ===== PULSE HIGHLIGHT on buttons ===== */
+    .pulse-highlight {
+      position: relative;
+    }
+    .pulse-highlight::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: inherit;
+      border: 2px solid var(--agd-orange);
+      animation: pulseRing 2s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes pulseRing {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0; transform: scale(1.08); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* ===== FLOATING STEP INDICATOR ===== */
+    .floating-step {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--agd-dark);
+      color: white;
+      padding: 12px 28px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      z-index: 300;
+      box-shadow: 0 8px 30px rgba(0,0,0,.25);
+      font-size: 13px;
+      font-weight: 600;
+      margin-left: 140px;
+    }
+    .floating-step .fs-dots {
+      display: flex; gap: 6px;
+    }
+    .floating-step .fs-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      transition: all .3s;
+    }
+    .floating-step .fs-dot.active {
+      background: var(--agd-orange);
+      box-shadow: 0 0 8px rgba(255,153,0,.5);
+    }
+    .floating-step .fs-dot.done {
+      background: var(--success);
+    }
+    .floating-step .fs-label {
+      color: var(--gray-400);
+    }
+    .floating-step .fs-current {
+      color: var(--agd-orange);
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -997,6 +1131,14 @@
 
       <!-- ===== SCREEN 0: BANDEJA ===== -->
       <div class="screen active" id="screen-0">
+        <div class="guide-banner" id="guide-0">
+          <div class="guide-step-num">1</div>
+          <div class="guide-text">
+            <h3>&#x1F447; Simula un pedido entrante</h3>
+            <p>Hace click en uno de los botones de ejemplo (Email, WhatsApp o PDF) para simular un pedido que llega desordenado. Luego apreta "Procesar con IA".</p>
+          </div>
+          <button class="btn btn-primary btn-sm guide-action pulse-highlight" onclick="cargarEjemplo('mail');scrollToEl('card-pedido-input')">&#x1F4E7; Cargar ejemplo de Email</button>
+        </div>
         <div class="stats-row fade-in">
           <div class="stat-card accent-orange">
             <div class="stat-icon" style="background:var(--agd-orange-light)">&#x1F4E8;</div>
@@ -1128,6 +1270,14 @@ La IA va a detectar automaticamente:
 
       <!-- ===== SCREEN 1: COTIZACIONES ===== -->
       <div class="screen" id="screen-1">
+        <div class="guide-banner" id="guide-1">
+          <div class="guide-step-num">2</div>
+          <div class="guide-text">
+            <h3>&#x1F447; Simula la carga de cotizaciones</h3>
+            <p>Hace click en "Simular 3 PDFs" para cargar cotizaciones de 3 proveedores distintos. La IA va a extraer precios, plazos y condiciones de cada uno.</p>
+          </div>
+          <button class="btn btn-primary btn-sm guide-action pulse-highlight" onclick="cargarCotizacionesDemo()">&#x1F4C4; Simular 3 PDFs</button>
+        </div>
         <div class="stats-row fade-in">
           <div class="stat-card accent-orange">
             <div class="stat-icon" style="background:var(--agd-orange-light)">&#x1F4C4;</div>
@@ -1188,6 +1338,14 @@ La IA va a detectar automaticamente:
 
       <!-- ===== SCREEN 2: COMPARATIVA ===== -->
       <div class="screen" id="screen-2">
+        <div class="guide-banner" id="guide-2">
+          <div class="guide-step-num">3</div>
+          <div class="guide-text">
+            <h3>&#x1F447; Genera la comparativa automatica</h3>
+            <p>Hace click en "Generar comparativa" para que la IA analice los 3 proveedores, calcule un score y recomiende la mejor opcion.</p>
+          </div>
+          <button class="btn btn-primary btn-sm guide-action pulse-highlight" onclick="generarComparativa()">&#x1F4CA; Generar comparativa</button>
+        </div>
         <div class="card fade-in">
           <div class="card-header">
             <h3>
@@ -1215,6 +1373,14 @@ La IA va a detectar automaticamente:
 
       <!-- ===== SCREEN 3: SAP ===== -->
       <div class="screen" id="screen-3">
+        <div class="guide-banner" id="guide-3">
+          <div class="guide-step-num">4</div>
+          <div class="guide-text">
+            <h3>&#x1F447; Genera los datos para SAP</h3>
+            <p>Hace click en "Generar datos SAP" para crear la estructura de Orden de Compra lista para copiar a SAP ME21N. Podes ver el JSON, el formulario y la validacion.</p>
+          </div>
+          <button class="btn btn-primary btn-sm guide-action pulse-highlight" onclick="generarSAP()">&#x1F4CB; Generar datos SAP</button>
+        </div>
         <div class="stats-row fade-in">
           <div class="stat-card accent-orange">
             <div class="stat-icon" style="background:var(--agd-orange-light)">&#x1F4CB;</div>
@@ -1269,6 +1435,14 @@ La IA va a detectar automaticamente:
 
       <!-- ===== SCREEN 4: SEGUIMIENTO ===== -->
       <div class="screen" id="screen-4">
+        <div class="guide-banner" id="guide-4">
+          <div class="guide-step-num">5</div>
+          <div class="guide-text">
+            <h3>&#x1F447; Genera el seguimiento automatico</h3>
+            <p>Hace click en "Generar seguimiento" para que la IA redacte los mails de confirmacion, seguimiento y reclamo automaticamente.</p>
+          </div>
+          <button class="btn btn-primary btn-sm guide-action pulse-highlight" onclick="generarSeguimiento()">&#x1F4EC; Generar seguimiento</button>
+        </div>
         <div class="stats-row fade-in">
           <div class="stat-card accent-orange">
             <div class="stat-icon" style="background:var(--agd-orange-light)">&#x1F4E6;</div>
@@ -1352,6 +1526,13 @@ La IA va a detectar automaticamente:
 
       <!-- ===== SCREEN 5: DASHBOARD ===== -->
       <div class="screen" id="screen-5">
+        <div class="guide-banner" id="guide-5" style="background:linear-gradient(135deg, #059669, #10b981)">
+          <div class="guide-step-num" style="background:white;color:#059669">&#x2713;</div>
+          <div class="guide-text">
+            <h3>&#x1F389; Demo completada!</h3>
+            <p>Recorriste todo el flujo de compras en menos de 3 minutos. Aca podes ver las metricas de impacto y ROI del sistema.</p>
+          </div>
+        </div>
         <div class="stats-row fade-in">
           <div class="stat-card accent-orange">
             <div class="stat-icon" style="background:var(--agd-orange-light)">&#x1F4B0;</div>
@@ -1469,6 +1650,20 @@ La IA va a detectar automaticamente:
   </div>
 </div>
 
+<!-- ===== FLOATING STEP INDICATOR ===== -->
+<div class="floating-step" id="floating-step">
+  <div class="fs-dots">
+    <div class="fs-dot active" id="fs-0"></div>
+    <div class="fs-dot" id="fs-1"></div>
+    <div class="fs-dot" id="fs-2"></div>
+    <div class="fs-dot" id="fs-3"></div>
+    <div class="fs-dot" id="fs-4"></div>
+    <div class="fs-dot" id="fs-5"></div>
+  </div>
+  <span class="fs-label">Paso</span>
+  <span class="fs-current" id="fs-label">1/6 - Bandeja de Pedidos</span>
+</div>
+
 <!-- ===== AI ASSISTANT PANEL ===== -->
 <div class="ai-panel" id="ai-panel">
   <div class="ai-panel-header">
@@ -1514,6 +1709,8 @@ function startDemo() {
 }
 
 // ===== NAVIGATION =====
+const fsLabels = ['Bandeja de Pedidos','Cotizaciones','Comparativa','Pre-carga SAP','Seguimiento','Dashboard'];
+
 function goToScreen(idx) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1523,6 +1720,18 @@ function goToScreen(idx) {
   document.getElementById('step-badge').textContent = `Paso ${idx + 1} de 6`;
   currentScreen = idx;
   updateProgress();
+  updateFloatingStep(idx);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateFloatingStep(idx) {
+  for (let i = 0; i < 6; i++) {
+    const dot = document.getElementById(`fs-${i}`);
+    dot.className = 'fs-dot';
+    if (i === idx) dot.classList.add('active');
+    if (completedSteps.has(i)) dot.classList.add('done');
+  }
+  document.getElementById('fs-label').textContent = `${idx+1}/6 - ${fsLabels[idx]}`;
 }
 
 function updateProgress() {
@@ -1534,6 +1743,28 @@ function markDone(idx) {
   completedSteps.add(idx);
   document.getElementById(`nav-${idx}`).classList.add('done');
   updateProgress();
+  // Hide the guide banner for this step
+  const guide = document.getElementById(`guide-${idx}`);
+  if (guide) guide.style.display = 'none';
+  updateFloatingStep(currentScreen);
+}
+
+function scrollToEl(id) {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 300);
+}
+
+function showPointerArrow(containerId, text) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  // Remove existing pointers
+  container.querySelectorAll('.pointer-arrow').forEach(p => p.remove());
+  const pointer = document.createElement('div');
+  pointer.className = 'pointer-arrow';
+  pointer.innerHTML = `<span class="arrow">&#x1F447;</span> ${text}`;
+  container.appendChild(pointer);
 }
 
 // ===== AI SIMULATION =====
@@ -1569,14 +1800,14 @@ function showModal(type) {
   const modals = {
     welcome: {
       icon: '&#x1F680;', iconClass: 'orange',
-      title: 'Bienvenido a la Demo',
-      desc: 'Vas a recorrer el flujo completo de compras automatizado con IA. Cada paso simula tu dia real, pero sin tareas manuales.',
+      title: 'Bienvenido a la Demo Interactiva',
+      desc: 'Te vamos a guiar paso a paso por el flujo completo. En cada pantalla vas a ver un banner naranja que te indica exactamente que hacer. Solo segui las instrucciones!',
       features: [
-        { icon: '&#x1F4E8;', title: 'Paso 1: Recibis un pedido', desc: 'Un mail, WhatsApp o PDF llega desordenado. La IA lo estructura.' },
-        { icon: '&#x1F4CA;', title: 'Paso 2-3: Cotizas y comparas', desc: 'Subis PDFs de proveedores, la IA extrae todo y recomienda.' },
-        { icon: '&#x26A1;', title: 'Paso 4-5: OC y seguimiento', desc: 'Datos listos para SAP + mails automaticos a proveedores.' },
+        { icon: '&#x1F447;', title: 'Segui los banners naranjas', desc: 'Cada pantalla tiene un indicador con el boton exacto que tenes que apretar.' },
+        { icon: '&#x2728;', title: 'Los botones brillan', desc: 'El boton que tenes que apretar tiene un efecto pulsante para que lo ubiques facil.' },
+        { icon: '&#x1F4CA;', title: '6 pasos, 3 minutos', desc: 'Pedido > Cotizaciones > Comparativa > SAP > Seguimiento > Dashboard.' },
       ],
-      buttons: [{ text: 'Comenzar', class: 'btn-primary btn-lg', action: 'closeModal()' }]
+      buttons: [{ text: 'Empezar paso a paso', class: 'btn-primary btn-lg', action: 'closeModal()' }]
     },
     pedidoOk: {
       icon: '&#x2705;', iconClass: 'green',
@@ -1855,7 +2086,25 @@ function procesarPedido() {
   const input = document.getElementById('pedido-input').value;
   if (!input.trim()) { showToast('Texto vacio', 'Pega un texto de pedido primero', 'warning'); return; }
 
+  // Hide initial guide banner, show "now process" guide
+  const g0 = document.getElementById('guide-0');
+  if (g0) g0.innerHTML = `
+    <div class="guide-step-num">1</div>
+    <div class="guide-text">
+      <h3>&#x26A1; Procesando pedido con IA...</h3>
+      <p>La IA esta analizando el texto para extraer material, cantidad, urgencia y sector.</p>
+    </div>`;
+
   simulateAI('ai-proc-1', () => {
+    // Update guide to show next action
+    if (g0) g0.innerHTML = `
+      <div class="guide-step-num" style="background:var(--success)">&#x2713;</div>
+      <div class="guide-text">
+        <h3>&#x2705; Pedido procesado! Ahora confirma los datos</h3>
+        <p>Revisa los datos extraidos por la IA y hace click en "Confirmar y crear pedido" para avanzar al paso 2.</p>
+      </div>
+      <span class="pointer-arrow guide-action"><span class="arrow">&#x1F447;</span> Confirma abajo</span>`;
+
     const result = document.getElementById('pedido-result');
     result.style.display = 'block';
     result.innerHTML = `
@@ -1872,7 +2121,7 @@ function procesarPedido() {
           <tr><td style="font-weight:700;color:var(--gray-500);font-size:12px;text-transform:uppercase">Origen</td><td><span class="badge badge-gray">Detectado automaticamente</span></td></tr>
         </table>
         <div style="margin-top:20px;display:flex;gap:8px">
-          <button class="btn btn-success" onclick="confirmarPedido()">&#x2705; Confirmar y crear pedido</button>
+          <button class="btn btn-success pulse-highlight" onclick="confirmarPedido()">&#x2705; Confirmar y crear pedido</button>
           <button class="btn btn-outline">&#x270F; Editar datos</button>
           <button class="btn btn-ghost">&#x274C; Descartar</button>
         </div>
@@ -1889,7 +2138,21 @@ function confirmarPedido() {
 
 // ===== SCREEN 2: COTIZACIONES =====
 function cargarCotizacionesDemo() {
+  const g1 = document.getElementById('guide-1');
+  if (g1) g1.innerHTML = `
+    <div class="guide-step-num">2</div>
+    <div class="guide-text">
+      <h3>&#x26A1; Leyendo PDFs con IA...</h3>
+      <p>La IA esta extrayendo items, precios, plazos y condiciones de cada cotizacion.</p>
+    </div>`;
   simulateAI('ai-proc-2', () => {
+    if (g1) g1.innerHTML = `
+      <div class="guide-step-num" style="background:var(--success)">&#x2713;</div>
+      <div class="guide-text">
+        <h3>&#x2705; Cotizaciones procesadas! Ahora genera la comparativa</h3>
+        <p>Revisa los datos extraidos y hace click en "Generar comparativa automatica" para avanzar al paso 3.</p>
+      </div>
+      <span class="pointer-arrow guide-action"><span class="arrow">&#x1F447;</span> Confirma abajo</span>`;
     document.getElementById('pdf-val').textContent = '3';
     document.getElementById('pdf-sub').textContent = 'Procesados';
     document.getElementById('items-val').textContent = '9';
@@ -1931,7 +2194,7 @@ function cargarCotizacionesDemo() {
             </div>
           </div>`).join('')}
         <div style="margin-top:20px;display:flex;gap:8px">
-          <button class="btn btn-success btn-lg" onclick="confirmarCotizaciones()">&#x1F4CA; Generar comparativa automatica</button>
+          <button class="btn btn-success btn-lg pulse-highlight" onclick="confirmarCotizaciones()">&#x1F4CA; Generar comparativa automatica</button>
           <button class="btn btn-outline">&#x2795; Agregar mas cotizaciones</button>
         </div>
       </div>`;
@@ -2018,7 +2281,7 @@ function generarComparativa() {
         </div>
 
         <div style="margin-top:20px;display:flex;gap:8px">
-          <button class="btn btn-success btn-lg" onclick="confirmarComparativa()">&#x2705; Aceptar recomendacion y generar OC</button>
+          <button class="btn btn-success btn-lg pulse-highlight" onclick="confirmarComparativa()">&#x2705; Aceptar recomendacion y generar OC</button>
           <button class="btn btn-outline">Elegir otro proveedor</button>
         </div>
       </div>`;
@@ -2123,7 +2386,7 @@ function generarSAP() {
         </div>
 
         <div style="margin-top:24px;display:flex;gap:8px">
-          <button class="btn btn-success btn-lg" onclick="confirmarSAP()">&#x2705; Confirmar OC</button>
+          <button class="btn btn-success btn-lg pulse-highlight" onclick="confirmarSAP()">&#x2705; Confirmar OC</button>
           <button class="btn btn-primary" onclick="copySAP()">&#x1F4CB; Copiar JSON</button>
           <button class="btn btn-outline">&#x1F5A8; Exportar PDF</button>
         </div>
@@ -2178,7 +2441,7 @@ function generarSeguimiento() {
           </div>`).join('')}
 
         <div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-success" onclick="enviarMails()">&#x1F4E8; Enviar confirmacion ahora</button>
+          <button class="btn btn-success pulse-highlight" onclick="enviarMails()">&#x1F4E8; Enviar confirmacion ahora</button>
           <button class="btn btn-primary">&#x23F0; Programar seguimiento automatico</button>
           <button class="btn btn-outline">&#x270F; Editar mails</button>
         </div>
